@@ -37,7 +37,7 @@ def in_zambia(coord):
 for tweet in stream:
     try:
         if "zambia" in tweet['user']['location'].lower():
-            print(tweet['text'])
+            print(tweet.strip())
     except KeyError:
         continue
 # Save to a database in a particular collection
