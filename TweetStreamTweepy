@@ -1,0 +1,26 @@
+import tweepy
+
+
+class Listener(StreamListener):
+    def on_data(self, data):
+        try:
+            print(data)
+            saveFile=open('tweetDB.csv', 'a')
+            saveFile.write(data)
+            saveFile.write('\n')
+            saveFile.close()
+            return True
+        except BaseException as e:
+            print('failed ondata,',str(e))
+            time.sleep(5)
+
+    def on_error(self, status):
+        print(status)
+
+q="Zambia"
+
+auth = OAuthHandler(ckey, csecret)
+auth.set_access_token(atoken, asecret)
+
+twitterStream = Stream(auth, Listener())
+twitterStream.filter(track=q)
