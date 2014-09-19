@@ -1,7 +1,6 @@
 import twitter
 import json
 import sys
-import oauth2
 import time
 from urllib2 import URLError
 from httplib import BadStatusLine
