@@ -1,0 +1,11 @@
+import sys
+
+if __name__ == '__main__':
+    with open('TwitterData0.txt', 'w') as outfile:
+        for fname in sys.argv:
+            if "StitchDataFiles" in fname:
+                continue
+            else:
+                with open(fname) as infile:
+                    for line in infile:
+                        outfile.write(line)
