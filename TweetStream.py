@@ -1,5 +1,6 @@
 import twitter
 import json
+import io
 import sys
 import time
 from urllib2 import URLError
@@ -85,6 +86,14 @@ def make_twitter_request(twitter_api_func, max_errors=10, *args, **kw):
                 print >> sys.stderr, "Too many consecutive errors...bailing out."
                 raise
 
+#save json
+def save_json(filename, data):
+    with io.open('{0}.json'.format(filename), 'w', encoding='utf-8') as f:
+        f.write(unicode(json.dumps(data, ensure_ascii=False)))
+
+def load_json(filename):
+    with io.open('{0}.json'.format(filename), encoding='utf-8') as f:
+        return f.read()
 
 # Save to a database in a particular collection
 def saveTweets(fileName, data):
@@ -107,9 +116,9 @@ if __name__ == '__main__':
     #stream = twitter_stream.statuses.filter(locations=locations)
     stream = make_twitter_request(twitter_stream.statuses.filter, locations=locations)
     #stream = twitter_stream.statuses.sample()
-    for tweet in stream:
+    for line in stream:
         try:
-            if "zambia" in tweet['user']['location'].lower():
-                print(tweet)
+            if "zambia" in line['user']['location'].lower():
+                print(line.strip())
         except KeyError:
             continue
