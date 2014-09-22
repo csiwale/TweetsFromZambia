@@ -116,6 +116,7 @@ if __name__ == '__main__':
     #stream = twitter_stream.statuses.filter(locations=locations)
     stream = make_twitter_request(twitter_stream.statuses.filter, locations=locations)
     #stream = twitter_stream.statuses.sample()
+    save_json('TwitterData', stream)
     for line in stream:
         try:
             if "zambia" in line['user']['location'].lower():
