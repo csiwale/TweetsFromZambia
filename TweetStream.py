@@ -88,7 +88,7 @@ def make_twitter_request(twitter_api_func, max_errors=10, *args, **kw):
 
 #save json
 def save_json(filename, data):
-    with io.open('{0}.json'.format(filename), 'w', encoding='utf-8') as f:
+    with io.open('{0}.json'.format(filename), 'a', encoding='utf-8') as f:
         f.write(unicode(json.dumps(data, ensure_ascii=False)))
 
 def load_json(filename):
@@ -116,10 +116,11 @@ if __name__ == '__main__':
     #stream = twitter_stream.statuses.filter(locations=locations)
     stream = make_twitter_request(twitter_stream.statuses.filter, locations=locations)
     #stream = twitter_stream.statuses.sample()
-    save_json('TwitterData', stream)
+
     for line in stream:
         try:
             if "zambia" in line['user']['location'].lower():
-                print(line.strip())
+                #print(type(line))
+                save_json('TwitterData', line)
         except KeyError:
             continue
