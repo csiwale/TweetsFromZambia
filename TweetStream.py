@@ -89,7 +89,7 @@ def make_twitter_request(twitter_api_func, max_errors=10, *args, **kw):
 #save json
 def save_json(filename, data):
     with io.open('{0}.json'.format(filename), 'a', encoding='utf-8') as f:
-        f.writelines(unicode(json.dumps(data, ensure_ascii=False)))
+        f.write(unicode(json.dumps(data, ensure_ascii=False)))
 
 def load_json(filename):
     with io.open('{0}.json'.format(filename), encoding='utf-8') as f:
@@ -121,7 +121,7 @@ if __name__ == '__main__':
     for line in stream:
         try:
             if "zambia" in line['user']['location'].lower():
-                print(json.dumps(line, ensure_ascii=False))
+                print(unicode(json.dumps(line, ensure_ascii=False)))
                 #save_json('Test', line)
-        except KeyError:
+        except Exception:
             continue
