@@ -89,7 +89,7 @@ def make_twitter_request(twitter_api_func, max_errors=10, *args, **kw):
 #save json
 def save_json(filename, data):
     with io.open('{0}.json'.format(filename), 'a', encoding='utf-8') as f:
-        f.write(unicode(json.dumps(data, ensure_ascii=False)))
+        f.writelines(unicode(json.dumps(data, ensure_ascii=False)))
 
 def load_json(filename):
     with io.open('{0}.json'.format(filename), encoding='utf-8') as f:
@@ -104,7 +104,7 @@ if __name__ == '__main__':
     twitter_api = oauth_login()
 
     locations = "22.070259,-18.141344,33.485053,-7.951179"
-    q = 'Zambia '+locations #Comma-separated list of terms
+    q = 'lol' #Comma-separated list of terms
 
     print >> sys.stderr, 'Filtering the public timeline for track = "%s"' % (q,)
 
@@ -114,13 +114,14 @@ if __name__ == '__main__':
     #See https://dev.twitter.com/docs/streaming-apis
     #stream = twitter_stream.statuses.filter(track=q)
     #stream = twitter_stream.statuses.filter(locations=locations)
+    #stream = make_twitter_request(twitter_stream.statuses.filter, track=q)
     stream = make_twitter_request(twitter_stream.statuses.filter, locations=locations)
     #stream = twitter_stream.statuses.sample()
 
     for line in stream:
         try:
             if "zambia" in line['user']['location'].lower():
-                #print(type(line))
-                save_json('TwitterData', line)
+                print(json.dumps(line, ensure_ascii=False))
+                #save_json('Test', line)
         except KeyError:
             continue
