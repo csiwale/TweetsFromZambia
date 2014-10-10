@@ -10,9 +10,13 @@ def find_popular_tweets(twitter_api, statuses, retweet_threshold=3):
     return [ status for status in statuses if status['retweet_count'] > retweet_threshold ]
 
 if __name__ == '__main__':
-    tweets = open(sys.argv[0])
+    tweets = open(sys.argv[1])
 
     #evaluate tweets
     for line in tweets:
-        tweet = json.loads(line)
+        try:
+            tweet = json.loads(line)
+            print tweet["text"]
+        except Exception as e:
+            print e
 

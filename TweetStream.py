@@ -89,24 +89,24 @@ def make_twitter_request(twitter_api_func, max_errors=10, *args, **kw):
 #save json
 def save_json(filename, data):
     with io.open('{0}.json'.format(filename), 'a', encoding='utf-8') as f:
-        f.write(unicode(json.dumps(data, ensure_ascii=False)))
+        f.write(unicode(json.dumps(data, ensure_ascii=False))+'\n')
+
+#save text
+def save_text(filename, data):
+    with io.open('{0}.txt'.format(filename), 'a', encoding='utf-8') as f:
+        f.write(unicode(json.dumps(data, ensure_ascii=False))+'\n')
 
 def load_json(filename):
     with io.open('{0}.json'.format(filename), encoding='utf-8') as f:
         return f.read()
 
-# Save to a database in a particular collection
-def saveTweets(fileName, data):
-    with open('data.txt', 'a') as outfile:
-        json.dump(data, outfile)
-
 if __name__ == '__main__':
     twitter_api = oauth_login()
 
     locations = "22.070259,-18.141344,33.485053,-7.951179"
-    q = 'lol' #Comma-separated list of terms
+    q = 'Zambia' #Comma-separated list of terms
 
-    print >> sys.stderr, 'Filtering the public timeline for track = "%s"' % (q,)
+    print >> sys.stderr, 'Filtering the public timeline for track = "%s %s"' % (q,locations,)
 
     #Reference the self.auth parameter
     twitter_stream = twitter.TwitterStream(auth=twitter_api.auth)
@@ -122,6 +122,7 @@ if __name__ == '__main__':
         try:
             if "zambia" in line['user']['location'].lower():
                 print(unicode(json.dumps(line, ensure_ascii=False)))
-                #save_json('Test', line)
+                save_json('TwitterData', line)
+                save_text('TwitterData', line)
         except Exception:
             continue
