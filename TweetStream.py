@@ -27,13 +27,13 @@ def in_zambia(coord):
         return False
     return True
 
-def make_twitter_request(twitter_api_func, max_errors=10, *args, **kw):
+def make_twitter_request(twitter_api_func, max_errors=100, *args, **kw):
     # A nested helper function that handles common HTTPErrors. Return an updated
     # value for wait_period if the problem is a 500 level error. Block until the
     # rate limit is reset if it's a rate limiting issue (429 error). Returns None
     # for 401 and 404 errors, which requires special handling by the caller.
     def handle_twitter_http_error(e, wait_period=2, sleep_when_rate_limited=True):
-        if wait_period > 3600: # Seconds
+        if wait_period > 7200: # Seconds
             print >> sys.stderr, 'Too many retries. Quitting.'
             raise e
         # See https://dev.twitter.com/docs/error-codes-responses for common codes
@@ -120,7 +120,7 @@ if __name__ == '__main__':
 
     for line in stream:
         try:
-            if "zambia" in line['user']['location'].lower():
+            if "zambia" in line['user']['location'].lower() or "zambia" in line['place'].lower():
                 print(unicode(json.dumps(line, ensure_ascii=False)))
                 save_json('TwitterData', line)
                 save_text('TwitterData', line)
