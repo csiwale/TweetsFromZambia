@@ -96,9 +96,7 @@ def save_text(filename, data):
     with io.open('{0}.txt'.format(filename), 'a', encoding='utf-8') as f:
         f.write(unicode(json.dumps(data, ensure_ascii=False))+'\n')
 
-def load_json(filename):
-    with io.open('{0}.json'.format(filename), encoding='utf-8') as f:
-        return f.read()
+
 
 if __name__ == '__main__':
     twitter_api = oauth_login()
