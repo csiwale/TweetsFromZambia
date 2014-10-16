@@ -17,19 +17,26 @@ def load_json(filename):
 
 if __name__ == '__main__':
     tweets = open(sys.argv[1])
-    x = 1
+
+    error_tweets = open('error_tweets.txt', 'a')
+    clean_tweets = open('cleaned_tweets.txt', 'a')
+    TwitterData0_cleaned = open('TwitterData0_Cleaned.txt', 'a')
+
+    num = 1
     #evaluate tweets
     for line in tweets:
+        num = num+1
         try:
-            line = line.decode('ascii')
-            #print line
-            tweet = json.loads(line)
-            x += 1
-
-        except Exception as e:
+            #print (line)
+            matchobj = re.match('(.*)<a href=(.*)</a>"(.*)', line)
+            #print(matchobj.group(2))
+            dq_url = matchobj.group(2)
+            sq_url = dq_url.replace('"', "'")
+            #print(sq_url)
+            line = line.replace(dq_url, sq_url)
+            #tweet = json.loads(line)
             #print(tweet["text"])
-            print (e, x)
-            x += 1
-
-
-
+            TwitterData0_cleaned.write(line)
+        except Exception as e:
+            #error_tweets.write(line)
+            print (e, num)
