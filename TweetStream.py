@@ -101,7 +101,7 @@ def save_text(filename, data):
 if __name__ == '__main__':
     twitter_api = oauth_login()
 
-    locations = "22.070259,-18.141344,33.485053,-7.951179"
+    locations = "21.999370574951172, -18.07947349548334, 33.705703735351634, -8.224360466003397"
     q = 'Zambia' #Comma-separated list of terms
 
     print >> sys.stderr, 'Filtering the public timeline for track = "%s %s"' % (q,locations,)
