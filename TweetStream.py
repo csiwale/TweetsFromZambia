@@ -118,7 +118,10 @@ if __name__ == '__main__':
 
     for line in stream:
         try:
-            if "zambia" in line['user']['location'].lower() or "zambia" in line['place'].lower():
+            if "zambia" in line['user']['location'].lower() \
+                    or "zambia" in line['place'].lower()\
+                    or "zambia" in line['user']['location']\
+                    or line['place']['country_code'] == 'ZM':
                 print(unicode(json.dumps(line, ensure_ascii=False)))
                 save_json('TwitterData', line)
                 save_text('TwitterData', line)
