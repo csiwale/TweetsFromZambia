@@ -3,6 +3,7 @@ import json
 import io
 import sys
 import time
+import datetime
 from urllib2 import URLError
 from httplib import BadStatusLine
 
@@ -89,7 +90,7 @@ def make_twitter_request(twitter_api_func, max_errors=100, *args, **kw):
 #save json
 def save_json(filename, data):
     with io.open('{0}.json'.format(filename), 'a', encoding='utf-8') as f:
-        f.write(unicode(json.dumps(data, ensure_ascii=False)))
+        f.write(unicode(json.dumps(data, ensure_ascii=False))+'\n')
 
 #save text
 def save_text(filename, data):
@@ -101,19 +102,19 @@ def save_text(filename, data):
 if __name__ == '__main__':
     twitter_api = oauth_login()
 
-    zambia_bbox = "21.999370574951172, -18.07947349548334, 33.705703735351634, -8.224360466003397"
+    zam_bbox = "21.999370574951172, -18.07947349548334, 33.705703735351634, -8.224360466003397"
 
-    provinces_bbox = "21.999370000005, -16.257279999990715, 23.051999999996042, -14.028600000005099," \
-                     "23.47894999998971, -14.047460000001593, 24.693070000008447, -12.50046999999904," \
-                     "27.50328000000445, -12.434640000006766, 28.063380000006873, -12.221380000002682," \
-                     "28.624949999997625, -10.280039999997825, 29.95264999999199, -9.116769999993267," \
-                     "29.802120000007562, -11.479179999994813, 30.722119999991264, -10.655249999996158" \
-                     "32.15623999998206, -14.316879999998491, 33.209009999991395, -13.774929999999586," \
-                     "27.15942000001087, -15.323470000002999, 28.952250000002095, -14.30633000000671," \
-                     "29.27329000001191, -15.747650000004796, 30.416969999991124, -14.966679999997723," \
+    provinces_bbox = "21.999370000005, -16.257279999990715, 23.051999999996042, -14.028600000005099, " \
+                     "23.47894999998971, -14.047460000001593, 24.693070000008447, -12.50046999999904, " \
+                     "27.50328000000445, -12.434640000006766, 28.063380000006873, -12.221380000002682, " \
+                     "28.624949999997625, -10.280039999997825, 29.95264999999199, -9.116769999993267, " \
+                     "29.802120000007562, -11.479179999994813, 30.722119999991264, -10.655249999996158 " \
+                     "32.15623999998206, -14.316879999998491, 33.209009999991395, -13.774929999999586, " \
+                     "27.15942000001087, -15.323470000002999, 28.952250000002095, -14.30633000000671, " \
+                     "29.27329000001191, -15.747650000004796, 30.416969999991124, -14.966679999997723, " \
                      "26.69096000000718, -17.493680000014137, 27.6304999999993, -16.138299999991432"
 
-    print >> sys.stderr, 'Filtering the public timeline by bounding box "%s"' % (zambia_bbox,)
+    print >> sys.stderr, 'Filtering the public timeline by bounding box "%s"' % (provinces_bbox,)
 
     #Reference the self.auth parameter
     twitter_stream = twitter.TwitterStream(auth=twitter_api.auth)
@@ -121,17 +122,13 @@ if __name__ == '__main__':
     #See https://dev.twitter.com/docs/streaming-apis
     #stream = twitter_stream.statuses.filter(locations=locations)
     #stream = make_twitter_request(twitter_stream.statuses.filter, track=q)
-    stream = make_twitter_request(twitter_stream.statuses.filter, locations=zambia_bbox)
+    stream = make_twitter_request(twitter_stream.statuses.filter, locations=provinces_bbox)
     #stream = twitter_stream.statuses.sample()
 
     for line in stream:
         try:
-            if "zambia" in line['user']['location'].lower() \
-                    or "zambia" in line['place'].lower()\
-                    or "zambia" in line['user']['location']\
-                    or line['place']['country_code'] == 'ZM':
-                print(unicode(json.dumps(line, ensure_ascii=False)))
-                save_json('TwitterData1', line)
-                save_text('TwitterData1', line)
+            print(unicode(json.dumps(line, ensure_ascii=False)))
+            save_json('TwitterData1', line)
+            save_text('TwitterData1', line)
         except Exception:
             continue
