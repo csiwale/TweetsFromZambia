@@ -42,13 +42,15 @@ def save_screen_names(tweets):
                 print (e)
 
 def save_source(tweets):
+    num = 1
     for line in tweets:
+        num += 1
         #line = line.decode('ascii')
         tweet = json.loads(line)
         with open('source.txt', 'a') as source:
             try:
                 matchobj = re.match('<a (.*)>(.*)</a>', tweet['source'])
-                print(matchobj.group(2))
+                print(matchobj.group(2), num)
                 source.write(matchobj.group(2) + '\n')
             except Exception as e:
                 print (e)
@@ -70,6 +72,6 @@ if __name__ == '__main__':
     #save_words(tweets)
     #save_hastags(tweets)
     #save_screen_names(tweets)
-    #save_texts(tweets)
-    save_source(tweets)
+    save_texts(tweets)
+    #save_source(tweets)
 
