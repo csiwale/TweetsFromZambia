@@ -131,7 +131,7 @@ if __name__ == '__main__':
                     or "zambia" in line['user']['location']\
                     or line['place']['country_code'] == 'ZM':
                 print(unicode(json.dumps(line, ensure_ascii=False)))
-                save_json('TwitterData1', line)
-                save_text('TwitterData1', line)
+                save_json('TwitterData2', line)
+                save_text('TwitterData2', line)
         except Exception:
             continue
