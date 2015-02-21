@@ -17,6 +17,8 @@ def save_words(tweets):
             try:
                 for w in tweet['text'].split():
                     #w = w.encode('ascii')
+                    w.rstrip(':;?,.!^-"@')
+                    w.replace('\n', "")
                     words.write(w+'\n')
             except Exception as e:
                 print (e)
@@ -65,13 +67,11 @@ def save_hastags(tweets):
             except Exception as e:
                 print (e)
 
-
-
 if __name__ == '__main__':
     tweets = open(sys.argv[1])
-    #save_words(tweets)
+    save_words(tweets)
     #save_hastags(tweets)
     #save_screen_names(tweets)
-    save_texts(tweets)
+    #save_texts(tweets)
     #save_source(tweets)
 
