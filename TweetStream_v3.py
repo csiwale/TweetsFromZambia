@@ -137,13 +137,8 @@ if __name__ == '__main__':
                     or "zambia" in line['user']['location']\
                     or line['place']['country_code'] == 'ZM':
                 print(unicode(json.dumps(line, ensure_ascii=False)))
-<<<<<<< HEAD:TweetStream.py
-                save_json('TwitterData3', line)
-                save_text('TwitterData3', line)
-=======
                 save_json(sys.argv[0], line)
                 save_text(sys.argv[0], line)
                 save_mongodb(line, "TweetsFromZambia", sys.argv[0])
->>>>>>> 9d3faa8882d14da2b7dbd64f14c8774a70be4ac1:TweetStream_v3.py
         except Exception:
             continue
