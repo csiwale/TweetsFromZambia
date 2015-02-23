@@ -128,7 +128,7 @@ if __name__ == '__main__':
     for line in stream:
         try:
             print(unicode(json.dumps(line, ensure_ascii=False)))
-            save_json('TwitterData1', line)
-            save_text('TwitterData1', line)
+            save_json(sys.argv[0], line)
+            save_text(sys.argv[0], line)
         except Exception:
             continue
