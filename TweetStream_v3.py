@@ -137,8 +137,8 @@ if __name__ == '__main__':
                     or "zambia" in line['user']['location']\
                     or line['place']['country_code'] == 'ZM':
                 print(unicode(json.dumps(line, ensure_ascii=False)))
-                save_json(sys.argv[0], line)
-                save_text(sys.argv[0], line)
-                save_mongodb(line, "TweetsFromZambia", sys.argv[0])
+                save_json(sys.argv[1], line)
+                save_text(sys.argv[1], line)
+                save_mongodb(line, "TweetsFromZambia", sys.argv[1])
         except Exception:
             continue
