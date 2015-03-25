@@ -8,6 +8,18 @@ from urllib2 import URLError
 from httplib import BadStatusLine
 import json
 import pymongo
+import mysql
+import mysql.connector
+from mysql.connector import errorcode
+
+config = {
+    'user': 'root',
+    'password': 'kansenshi04',
+    'host': '127.0.0.1',
+    'database': 'TweetsFromZambia',
+    'raise_on_warnings': True,
+    'use_pure': False,
+}
 
 def oauth_login():
     CONSUMER_KEY = 'uz1mF8q2Ycq8hTtiq1pGukQbl'
@@ -99,6 +111,32 @@ def save_text(filename, data):
     with io.open('{0}.txt'.format(filename), 'a', encoding='utf-8') as f:
         f.write(unicode(json.dumps(data, ensure_ascii=False))+'\n')
 
+def save_mysql(tweet_id, raw_tweet):
+    query = "INSERT INTO json_cache(tweet_id, raw_tweet) VALUES(%s, %s)"
+    args = (tweet_id, raw_tweet)
+    try:
+        cnx = mysql.connector.connect(**config)
+        cursor = cnx.cursor()
+        cursor.execute(query, args)
+        if cursor.lastrowid:
+            print('last insert id', cursor.lastrowid)
+            query = "INSERT INTO tweets(tweet_id, tweet_text, entities, created_at, geo_lat, geo_long, user_id, screen_name) VALUES(%s, %s)"
+            args = (tweet_id, raw_tweet)
+        else:
+            print('last insert id not found')
+            cnx.rollback()
+        cursor.close()
+        cnx.commit()
+    except mysql.connector.Error as err:
+        if err.errno == errorcode.ER_ACCESS_DENIED_ERROR:
+            print("Something is wrong with your user name or password")
+        elif err.errno == errorcode.ER_BAD_DB_ERROR:
+            print("Database does not exist")
+        else:
+            print(err)
+    finally:
+        cursor.close()
+        cnx.close()
 
 def save_mongodb(data, mongo_db, mongo_db_coll, **mongo_conn_kw):
     # Connects to the MongoDB server running on
@@ -140,5 +178,6 @@ if __name__ == '__main__':
                 save_json(sys.argv[1], line)
                 save_text(sys.argv[1], line)
                 save_mongodb(line, "TweetsFromZambia", sys.argv[1])
+                save_mysql(line['id'], line)
         except Exception:
             continue
