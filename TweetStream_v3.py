@@ -120,8 +120,28 @@ def save_mysql(tweet_id, raw_tweet):
         cursor.execute(query, args)
         if cursor.lastrowid:
             print('last insert id', cursor.lastrowid)
-            query = "INSERT INTO tweets(tweet_id, tweet_text, entities, created_at, geo_lat, geo_long, user_id, screen_name) VALUES(%s, %s)"
-            args = (tweet_id, raw_tweet)
+            query = "INSERT INTO tweets(tweet_id, tweet_text,  created_at, coordinates, entities, favourite_count," \
+                    "place, retweeted, retweet_count, retweet_status, source, user, user_id, screen_name, name, profile_url) " \
+                    "VALUES(%(tweet_id)s, %(tweet_text)s), %(created_at)s, %(coordinates)s, %(entities)s, %(favourite_count)s, " \
+                    "%(place)s, %(retweeted)s, %(retweet_count)s, %(retweet_status)s, %(source)s, %(user)s, %(user_id)s, %(screen_name)s, %(name)s, %(profile_url)s"
+            args = {
+                'tweet_id': raw_tweet['id'],
+                'tweet_text': raw_tweet['tweet_text'],
+                'created_at': raw_tweet['created_at'],
+                'entities': raw_tweet['entities'],
+                'favourite_count': raw_tweet['favourite_count'],
+                'place': raw_tweet['place'],
+                'retweeted': raw_tweet['retweeted'],
+                'retweet_count': raw_tweet['retweet_count'],
+                'retweet_status': raw_tweet['retweet_status'],
+                'source': raw_tweet['source'],
+                'user': raw_tweet['user'],
+                'user_id': raw_tweet['user_id'],
+                'screen_name': raw_tweet['screen_name'],
+                'name': raw_tweet['name'],
+                'profile_url': raw_tweet['profile_url'],
+            }
+            cursor.execute(query, args)
         else:
             print('last insert id not found')
             cnx.rollback()
