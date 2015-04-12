@@ -198,6 +198,6 @@ if __name__ == '__main__':
                 save_json(sys.argv[1], line)
                 save_text(sys.argv[1], line)
                 save_mongodb(line, "TweetsFromZambia", sys.argv[1])
-                save_mysql(line['id'], line)
+                #save_mysql(line['id'], line)
         except Exception:
             continue
