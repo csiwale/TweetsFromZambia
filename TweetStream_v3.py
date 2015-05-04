@@ -188,16 +188,19 @@ if __name__ == '__main__':
     stream = make_twitter_request(twitter_stream.statuses.filter, locations=zambia_bbox)
     #stream = twitter_stream.statuses.sample()
 
-    for line in stream:
-        try:
-            if "zambia" in line['user']['location'].lower() \
-                    or "zambia" in line['place'].lower()\
-                    or "zambia" in line['user']['location']\
-                    or line['place']['country_code'] == 'ZM':
-                print(unicode(json.dumps(line, ensure_ascii=False)))
-                save_json(sys.argv[1], line)
-                save_text(sys.argv[1], line)
-                save_mongodb(line, "TweetsFromZambia", sys.argv[1])
-                #save_mysql(line['id'], line)
-        except Exception:
-            continue
+    try:
+        for line in stream:
+            try:
+                if "zambia" in line['user']['location'].lower() \
+                        or "zambia" in line['place'].lower()\
+                        or "zambia" in line['user']['location']\
+                        or line['place']['country_code'] == 'ZM':
+                    print(unicode(json.dumps(line, ensure_ascii=False)))
+                    save_json(sys.argv[1], line)
+                    save_text(sys.argv[1], line)
+                    save_mongodb(line, "TweetsFromZambia", sys.argv[1])
+                    #save_mysql(line['id'], line)
+            except Exception:
+                continue
+    except Exception as e:
+        print e
